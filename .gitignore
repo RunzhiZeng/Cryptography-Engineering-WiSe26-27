@@ -1,0 +1,8 @@
+# Cargo build output in all packages
+target/
+
+# Rustfmt backups
+*.rs.bk
+
+# macOS metadata
+.DS_Store
