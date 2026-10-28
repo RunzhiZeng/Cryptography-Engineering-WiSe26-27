@@ -1,0 +1,8 @@
+[package]
+name = "hkdf_sha256_template"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+hmac_sha256_template = { path = "../HMAC_SHA256_template" }
+hex = "0.4"
