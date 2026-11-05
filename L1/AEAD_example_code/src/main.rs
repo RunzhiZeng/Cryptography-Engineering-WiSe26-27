@@ -75,7 +75,7 @@ pub fn main() {
         let fail1 = AEADdemo::decrypt(&key, &nonce, &ct_tampered, ad.as_bytes()).is_err();
         println!("Tamper ciphertext → decrypt {}", if fail1 { "Fail" } else { "If this happen, then email runzhi.zeng@uni-kassel.de immediately" });
 
-        // (5) Modify AD → decrypt must fail
+        // (5) Modify AD → decrypt should fail
         let ad2 = format!("{}*", ad);
         let fail2 = AEADdemo::decrypt(&key, &nonce, &ct, ad2.as_bytes()).is_err();
         println!("Modify AD → decrypt {}", if fail2 { "Fail" } else { "If this happen, then email runzhi.zeng@uni-kassel.de immediately" });
