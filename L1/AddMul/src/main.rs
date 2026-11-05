@@ -10,5 +10,5 @@ fn main() {
 
     // Intentional compile error (E0603): `add` is private to `arithmetic`.
     // Comment out the following line, then use `cargo run` to run the demo.
-    // println!("{a} + {b} = {}", arithmetic::add(a, b));
+    println!("{a} + {b} = {}", arithmetic::add(a, b));
 }

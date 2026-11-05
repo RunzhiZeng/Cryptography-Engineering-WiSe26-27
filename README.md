@@ -4,3 +4,4 @@ Example Rust code for [Cryptography Engineering](https://runzhizeng.github.io/CE
 
 - [Lecture 1](L1/): Some Rust basics, SHA3-512, HMAC, HKDF, and AEAD.
 - [Lecture 2](L2/): SHAKE128, SHAKE256, incremental hashing, HKDF, and HMAC/HKDF implementation exercises.
+- [Lecture 3](L3/): AES-CTR encryption, decryption, and initial counter blocks.
