@@ -63,4 +63,25 @@ mod tests {
         let ct = encrypt(&key, &nonce, pt, b"AD1").unwrap();
         assert!(decrypt(&key, &nonce, &ct, b"AD2").is_err());
     }
+
+    #[test]
+    fn wrong_nonce_fails_with_original_ad() {
+        let key = [0x42; 32];
+        let nonce = [0x24; 12];
+        let ad = b"header";
+        let messages: [&[u8]; 2] = [b"hello AEAD", b""];
+
+        for plaintext in messages {
+            let ct = encrypt(&key, &nonce, plaintext, ad).unwrap();
+            assert_eq!(decrypt(&key, &nonce, &ct, ad).unwrap(), plaintext);
+
+            for byte_index in 0..nonce.len() {
+                for bit in 0..8 {
+                    let mut modified_nonce = nonce;
+                    modified_nonce[byte_index] ^= 1u8 << bit;
+                    assert!(decrypt(&key, &modified_nonce, &ct, ad).is_err());
+                }
+            }
+        }
+    }
 }

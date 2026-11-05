@@ -23,7 +23,7 @@ fn b64d(s: &str) -> Result<Vec<u8>, base64::DecodeError> {
 
 /// AEAD demo loop with the following steps:
 /// (1) random key; (2) encrypt; (3) decrypt;
-/// (4) tamper ciphertext; (5) tamper AD.
+/// (4) tamper ciphertext; (5) tamper AD; (6) tamper nonce (IV).
 pub fn main() {
     println!("AEAD demo (AES-256-GCM). Type 'exit' to quit.");
 
@@ -79,6 +79,25 @@ pub fn main() {
         let ad2 = format!("{}*", ad);
         let fail2 = AEADdemo::decrypt(&key, &nonce, &ct, ad2.as_bytes()).is_err();
         println!("Modify AD → decrypt {}", if fail2 { "Fail" } else { "If this happen, then email runzhi.zeng@uni-kassel.de immediately" });
+
+        // (6) Modify only the nonce (IV); keep the ciphertext and AD unchanged.
+        let mut modified_nonce = nonce;
+        let mut random_choice = [0u8; 2];
+        match OsRng.try_fill_bytes(&mut random_choice) {
+            Ok(()) => {}
+            Err(error) => {
+                eprintln!("Random bit selection failed: {error}");
+                std::process::exit(1);
+            }
+        }
+        let byte_index = random_choice[0] as usize % nonce.len(); // Choose a nonce byte.
+        let bit_mask = 1u8 << (random_choice[1] % 8); // Choose one bit in that byte.
+        modified_nonce[byte_index] ^= bit_mask; // XOR with the mask flips exactly one bit.
+        let fail_nonce = AEADdemo::decrypt(&key, &modified_nonce, &ct, ad.as_bytes()).is_err();
+        println!("Modify nonce (IV) → decrypt {}", if fail_nonce { "Fail" } else { "If this happen, then email runzhi.zeng@uni-kassel.de immediately" });
+        println!("Original nonce (hex): {:02x?}", nonce);
+        println!("Modified nonce (hex): {:02x?}", modified_nonce);
+        println!("Byte[{byte_index}]: 0x{:02x} -> 0x{:02x} (XOR mask: 0x{bit_mask:02x})", nonce[byte_index], modified_nonce[byte_index]);
     }
     println!("Exit.");
 }
