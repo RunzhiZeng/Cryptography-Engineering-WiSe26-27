@@ -1,9 +1,7 @@
-mod crypto;
-mod io;
-mod utils;
-use crate::crypto::hmac::{compute_hmac, verify_hmac, HASH_NAME};
-use crate::io::readline::read_line;
-use crate::utils::encode::decode_b64_flex;
+// The modules are declared in src/lib.rs; main.rs uses them through the library crate.
+use hmac_sample::crypto::hmac::{compute_hmac, verify_hmac, HASH_NAME};
+use hmac_sample::io::readline::read_line;
+use hmac_sample::utils::encode::decode_b64_flex;
 use base64::{engine::general_purpose, Engine as _};
 use rand::rngs::OsRng;
 use rand::RngCore;

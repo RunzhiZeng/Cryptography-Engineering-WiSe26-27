@@ -6,7 +6,7 @@ use std::io::{self, Read, Write};
 // Change the hash type and its display name together.
 // Examples: sha3::Sha3_256, sha3::Sha3_512, sha2::Sha256, sha2::Sha512.
 type Hash = sha2::Sha256;
-const HASH_NAME: &str = "SHA2-256";
+const HASH_NAME: &str = "SHA-256";
 
 fn main() -> io::Result<()> {
     println!("{HASH_NAME} File Hasher");

@@ -1,6 +1,5 @@
 mod crypto;
 mod io;
-mod utils;
 
 use crate::crypto::AEADdemo::{self, Key, Nonce};
 use crate::io::prompt_readline::read_line_prompt;
@@ -10,15 +9,6 @@ use rand::{rngs::OsRng, RngCore};
 
 fn b64e(data: &[u8]) -> String {
     general_purpose::STANDARD.encode(data)
-}
-
-fn b64d(s: &str) -> Result<Vec<u8>, base64::DecodeError> {
-    // accept padded/unpadded/URL-safe; strip whitespace
-    let s: String = s.chars().filter(|c| !c.is_whitespace()).collect();
-    if let Ok(b) = general_purpose::STANDARD.decode(&s) { return Ok(b); }
-    if let Ok(b) = general_purpose::STANDARD_NO_PAD.decode(&s) { return Ok(b); }
-    if let Ok(b) = general_purpose::URL_SAFE.decode(&s) { return Ok(b); }
-    general_purpose::URL_SAFE_NO_PAD.decode(&s)
 }
 
 /// AEAD demo loop with the following steps:
@@ -53,12 +43,9 @@ pub fn main() {
         let split_at = ct.len().saturating_sub(16);
         let (ciphertext, tag) = ct.split_at(split_at);
 
-        use base64::{engine::general_purpose, Engine as _};
-        let b64 = |d: &[u8]| general_purpose::STANDARD.encode(d);
-
-        println!("\nNonce (Base64): {}", b64(&nonce));
-        println!("Ciphertext (Base64): {}", b64(ciphertext));
-        println!("Tag (Base64): {}", b64(tag));
+        println!("\nNonce (Base64): {}", b64e(&nonce));
+        println!("Ciphertext (Base64): {}", b64e(ciphertext));
+        println!("Tag (Base64): {}", b64e(tag));
         println!("Ciphertext+Tag length: {} bytes", ct.len());
 
         // (3) Decrypt: show success
@@ -73,12 +60,12 @@ pub fn main() {
             ct_tampered[0] ^= 0x01;
         }
         let fail1 = AEADdemo::decrypt(&key, &nonce, &ct_tampered, ad.as_bytes()).is_err();
-        println!("Tamper ciphertext → decrypt {}", if fail1 { "Fail" } else { "If this happen, then email runzhi.zeng@uni-kassel.de immediately" });
+        println!("Tamper ciphertext → decrypt {}", if fail1 { "Fail" } else { "If this happens, then email runzhi.zeng@uni-kassel.de immediately" });
 
         // (5) Modify AD → decrypt should fail
         let ad2 = format!("{}*", ad);
         let fail2 = AEADdemo::decrypt(&key, &nonce, &ct, ad2.as_bytes()).is_err();
-        println!("Modify AD → decrypt {}", if fail2 { "Fail" } else { "If this happen, then email runzhi.zeng@uni-kassel.de immediately" });
+        println!("Modify AD → decrypt {}", if fail2 { "Fail" } else { "If this happens, then email runzhi.zeng@uni-kassel.de immediately" });
 
         // (6) Modify only the nonce (IV); keep the ciphertext and AD unchanged.
         let mut modified_nonce = nonce;
@@ -94,7 +81,7 @@ pub fn main() {
         let bit_mask = 1u8 << (random_choice[1] % 8); // Choose one bit in that byte.
         modified_nonce[byte_index] ^= bit_mask; // XOR with the mask flips exactly one bit.
         let fail_nonce = AEADdemo::decrypt(&key, &modified_nonce, &ct, ad.as_bytes()).is_err();
-        println!("Modify nonce (IV) → decrypt {}", if fail_nonce { "Fail" } else { "If this happen, then email runzhi.zeng@uni-kassel.de immediately" });
+        println!("Modify nonce (IV) → decrypt {}", if fail_nonce { "Fail" } else { "If this happens, then email runzhi.zeng@uni-kassel.de immediately" });
         println!("Original nonce (hex): {:02x?}", nonce);
         println!("Modified nonce (hex): {:02x?}", modified_nonce);
         println!("Byte[{byte_index}]: 0x{:02x} -> 0x{:02x} (XOR mask: 0x{bit_mask:02x})", nonce[byte_index], modified_nonce[byte_index]);

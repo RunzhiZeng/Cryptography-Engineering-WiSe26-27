@@ -37,7 +37,7 @@ fn main() -> Result<(), StreamCipherError> {
 
     let message_initial_block = make_counter_block(1, 0); // Message number 1; counter starts at 0.
 
-    let plaintext = b"I want to encrypt this LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG meesage using AES-256 in CTR mode!";
+    let plaintext = b"I want to encrypt this LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG message using AES-256 in CTR mode!";
     println!("AES-256-CTR demo");
     println!("Key (hex): {}", hex::encode(key)); // Print the key only for this teaching demo.
     println!("Initial counter block = nonce (8 bytes) || initial counter (8 bytes, big-endian).");
@@ -114,7 +114,7 @@ fn main() -> Result<(), StreamCipherError> {
         ciphertext_xor.push(ciphertext1[i] ^ ciphertext2[i]);
         plaintext_xor.push(plaintext1[i] ^ plaintext2[i]);
     }
-    println!("\n(3) Reusing the same key and starting block: Reveal the XOR bias of the two message blocks");
+    println!("\n(3) Reusing the same key and starting block: Reveal the XOR of the two plaintexts");
     print_counter_block("Reused starting block", &zero_initial_block);
     println!("Plaintext 1: {}", String::from_utf8_lossy(plaintext1));
     println!("Plaintext 2: {}", String::from_utf8_lossy(plaintext2));

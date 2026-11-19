@@ -1,5 +1,5 @@
-mod crypto;
-mod io;
+// The modules are declared in src/lib.rs; main.rs uses them through the library crate.
+use hkdf_demo_modular::{crypto, io};
 
 use base64::{engine::general_purpose, Engine as _};
 use crypto::hkdf_demo::{derive_aes256gcm_key, HASH_NAME};

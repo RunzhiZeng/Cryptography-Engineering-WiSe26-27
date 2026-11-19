@@ -3,7 +3,7 @@ use hmac::{digest::InvalidLength, Hmac, Mac};
 // Change the hash type and its display name together.
 // Examples: sha3::Sha3_256, sha3::Sha3_512, sha2::Sha256, sha2::Sha512.
 type Hash = sha2::Sha256;
-pub const HASH_NAME: &str = "SHA2-256";
+pub const HASH_NAME: &str = "SHA-256";
 type HmacHash = Hmac<Hash>; // HMAC using the selected hash
 
 /// Computes HMAC using the selected hash; initialization errors are returned.

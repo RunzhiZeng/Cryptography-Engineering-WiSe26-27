@@ -1,0 +1,14 @@
+[package]
+name = "ecdsa_nonce_reuse_template"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+p256 = { version = "0.13", features = ["arithmetic"] } # Group arithmetic only; ECDSA itself is in src/ecdsa_demo.rs.
+sha2 = "0.10"
+hmac = "0.12"
+rand = "0.8"
+hex = "0.4"
+
+[dev-dependencies]
+p256 = { version = "0.13", features = ["ecdsa"] } # Tests compare with the library's ECDSA.
