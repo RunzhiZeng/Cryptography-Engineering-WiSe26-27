@@ -1,0 +1,8 @@
+[package]
+name = "group_demo"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+p256 = { version = "0.13", features = ["arithmetic"] }
+hex = "0.4"
